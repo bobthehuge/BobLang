@@ -1,0 +1,11 @@
+set hello "hello"
+set world "world!"
+
+print hello
+print " "
+println world
+
+println (add 42 -69.42)
+println (sub 0 1)
+println (mul 35 24)
+println (div 1057778 5)
