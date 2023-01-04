@@ -1,5 +1,5 @@
 # BobLang
-My ToyLangage written in Ocaml. This is not a serious project so don't expect a revolutionary programming language or else
+My ToyLanguage written in Ocaml. This is not a serious project so don't expect a revolutionary programming language or else
 
 # HTUI
 ```
