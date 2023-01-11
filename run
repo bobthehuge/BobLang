@@ -1,0 +1,2 @@
+args=("$@")
+dune exec boblang ${args[0]}

@@ -32,15 +32,23 @@
         | "/*" { read_multi_line_comment lexbuf }
         | '"' { read_string (Buffer.create 17) lexbuf }
         | '\'' { read_char lexbuf }
+        | '$' { DOLLAR }
         | int { INT (int_of_string (Lexing.lexeme lexbuf)) }
         | float { FLOAT (float_of_string (Lexing.lexeme lexbuf)) }
-        | "set" { SET }
-        | "add" { ADD }
-        | "sub" { SUB }
-        | "mul" { MUL }
-        | "div" { DIV }
+        | "true" { BOOL (true) }
+        | "false" { BOOL (false) }
+        | "+" { ADD }
+        | "-" { SUB }
+        | "*" { MUL }
+        | "/" { DIV }
         | "println" { PRINTLN }
         | "print" { PRINT }
+        | "!" { EXCLAM }
+        | "&&" { AND }
+        | "||" { OR }
+        | "=" { EQ }
+        | ">" { RANGLE }
+        | "<" { LANGLE }
         | id { ID (Lexing.lexeme lexbuf) }
         | newline {next_line lexbuf; read_token lexbuf}
         | whitespace {read_token lexbuf}
