@@ -1,4 +1,5 @@
 open Bobcore;;
+open Stdenv;;
 open Memory;;
 open Lexer;;
 open Printf;;
@@ -26,17 +27,6 @@ let parse_with_error lexbuf =
     fprintf stderr "%a: syntax error\n" print_position lexbuf;
     exit (-1)
 
-(*let rec parse_and_print lexbuf =
-    let tok = parse_with_error lexbuf
-    in match tok with
-    | Int _ | Float _ | Char _ | String _
-    | Set _ | Add _ | Print _ | Println _ ->
-            fprintf stdout "%s\n" (debug tok);
-            parse_and_print lexbuf
-
-    | Null -> parse_and_print lexbuf
-    | Exit -> ()*)
-
 let rec run_prog proc_list =
     match proc_list with
     | [] -> ()
@@ -44,17 +34,24 @@ let rec run_prog proc_list =
               in if tok = Null then run_prog l
               else run_prog (tok::l)
 
-let loop filename () =
-  let inx = open_in filename 
-  in let lexbuf = Lexing.from_channel inx 
-  in (lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
-      run_prog (parse_with_error lexbuf);
-      close_in inx)
+let parse_string str () =
+    let lexbuf = Lexing.from_string str
+    in begin
+        lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = "func" };
+        run_prog (parse_with_error lexbuf)
+    end
+
+let parse_file filename () =
+    let inx = open_in filename 
+    in let lexbuf = Lexing.from_channel inx 
+    in (lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_fname = filename };
+        run_prog (parse_with_error lexbuf);
+        close_in inx)
 
 let () =
     let file = Sys.argv.(1)
     in if String.length file < 4 then unkn_file()
     else if String.sub file ((String.length file) - 3) (3) <> ".bl" then
         unkn_file()
-    else print_endline(""); loop Sys.argv.(1) ()
+    else print_endline(""); load_env(); parse_file Sys.argv.(1) ()
     

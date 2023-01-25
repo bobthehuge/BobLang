@@ -41,17 +41,17 @@
         | "-" { SUB }
         | "*" { MUL }
         | "/" { DIV }
-        | "println" { PRINTLN }
-        | "print" { PRINT }
+        | "," { COMMA }
         | "!" { EXCLAM }
         | "&&" { AND }
         | "||" { OR }
         | "=" { EQ }
         | ">" { RANGLE }
         | "<" { LANGLE }
+        | "return" { RETURN }
         | id { ID (Lexing.lexeme lexbuf) }
-        | newline {next_line lexbuf; read_token lexbuf}
-        | whitespace {read_token lexbuf}
+        | newline { next_line lexbuf; read_token lexbuf }
+        | whitespace { read_token lexbuf }
         | eof { EOF }
         | _ { raise (SyntaxError ("Lexer - Illegal character: " ^ Lexing.lexeme lexbuf)) }
 

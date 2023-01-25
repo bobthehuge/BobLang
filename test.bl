@@ -1,14 +1,18 @@
 hello = "hello"
 world = "world!"
+state = true
 
-print $hello
-print " "
-println $world
+//test = (add(5,2))
+//println ($test)
 
-println true == true
+print (hello)
+print (" ")
+println ($world)
+
+println ($state == true)
 println (true && true)
 
-println (5 * 2 / 2 + 2)
+println (5 * 2 + 2 / 2)
 println (2 + 2 * 5 / 2)
 println (0 - 1.5)
 println (35 * 24)

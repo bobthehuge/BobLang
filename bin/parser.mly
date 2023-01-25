@@ -1,5 +1,6 @@
 %{
     open Types
+    open Memory
 %}
 
 %token <int> INT
@@ -13,8 +14,7 @@
 %token MUL
 %token DIV
 
-%token PRINTLN
-%token PRINT
+%token RETURN
 
 %token LPAREN
 %token RPAREN
@@ -26,12 +26,12 @@
 %token LANGLE
 %token RANGLE
 
+%token COMMA
 %token DOLLAR
 %token <string> ID
 
 %token EOF
 
-%right PRINT PRINTLN
 %right EQ
 
 %left ADD SUB LANGLE RANGLE
@@ -67,13 +67,14 @@ proc:
     | op=un_op; e=proc { new_un_op op e }
     | e1=proc; op=bin_op; e2=proc { new_bin_op op e1 e2 }
     | DOLLAR; x=ID { Var x }
-    | x=ID; EQ; e=proc { Set (x, e) }
-    | PRINT; e=proc { Print e }
-    | PRINTLN; e=proc { Println e }
+    | id=ID; EQ; e=proc { Set (id, e) }
+    | id=ID; LPAREN; params=separated_list(COMMA, proc); RPAREN { Call (id, params) }
+    | RETURN; e=proc { Return e }
     ;
 
 %inline un_op:
     | EXCLAM { "not" }
+    | SUB { "sub" }
     ;
 
 %inline bin_op:
@@ -83,6 +84,7 @@ proc:
     | DIV { "div" }
     | AND { "and" }
     | OR { "or" }
+    | EXCLAM EQ { "neq" }
     | EQ EQ { "eq" }
     | RANGLE { "gt" }
     | LANGLE { "lt" }
